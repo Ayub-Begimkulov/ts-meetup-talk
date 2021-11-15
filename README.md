@@ -154,3 +154,63 @@ type ComputeDeep<T> = T extends object
 Мы сделали его рекурсивным, для того, чтобы раскрывались все вложенные объекты, так же добавили отедльный кейс для функций.
 
 ## 2 Популярные ошибки
+
+### Отсутсвие поддержки readonly значений (зачастую с масивами)
+
+<!-- TODO add explanation of what readonly -->
+
+Данная проблема особенна важна при написании библиотек.
+
+Давайте представим, что у нас есть функция `map`, которая абстрагирует вызов `.map` метода в массиве.
+
+```ts
+const map = <T, R>(arr: T[], mapper: (arg: T) => R): R[] => {
+    return arr.map(mapper);
+};
+```
+
+Как вы все знаете, `.map` не мутирует оригинальный масив, а создает новый.
+
+Сооветсвенно, функция представленная выша должны работать и с `readonly` массивом.
+
+Однако это не сработает:
+
+```ts
+const myReadonlyArray = [1, 2, 3, 4] as const;
+
+map(myReadonlyArray, n => n * 2);
+```
+
+TS выведет ошибку:
+
+```
+Argument of type 'readonly [1, 2, 3]' is not assignable to parameter of type 'unknown[]'.
+  The type 'readonly [1, 2, 3]' is 'readonly' and cannot be assigned to the mutable type 'unknown[]'.ts(2345)
+```
+
+Связанно это с тем, что `readonly` массив не имет мутирующих методов (например, `splice`, `pop`, etc.).
+
+Следовательно, `readonly` массив не будет присаиваться в обычный массив.
+
+Поэтому, в большинстве случаев (особенно с библиотеками) лучше зарание подготовиться к таким ситуациям, и принимать `readonly` массив, в тех случиях когда он не мутируется.
+
+```diff
+-const map = <T, R>(arr: T[], mapper: (arg: T) => R): R[] => {
++const map = <T, R>(arr: readonly T[], mapper: (arg: T) => R): R[] => {
+    return arr.map(mapper);
+};
+```
+
+### Нет поддержки union'ов
+
+```ts
+type;
+```
+
+## Biavriance Hack
+
+## NoInfer
+
+## Testing types
+
+https://github.com/microsoft/TypeScript/issues/27024#issuecomment-421529650
