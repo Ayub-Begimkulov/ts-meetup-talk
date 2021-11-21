@@ -1,4 +1,4 @@
-https://github.com/millsp/ts-toolbelt/discussions/264
+<!-- https://github.com/millsp/ts-toolbelt/discussions/264
 https://github.com/millsp/ts-toolbelt/blob/master/sources/Any/Compute.ts
 https://github.com/millsp/ts-toolbelt/blob/master/sources/index.ts
 https://github.com/sindresorhus/type-fest
@@ -10,7 +10,7 @@ https://stackoverflow.com/questions/57683303/how-can-i-see-the-full-expanded-con
 https://stackoverflow.com/questions/62508909/vs-code-how-to-show-full-typescript-definition-on-mouse-hover?noredirect=1#comment110551926_62508909
 
 -   compute type for debugging
--   vscode don't shorten the output size
+-   vscode don't shorten the output size -->
 
 Всем привет!
 
