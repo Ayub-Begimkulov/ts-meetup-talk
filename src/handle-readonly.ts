@@ -1,6 +1,10 @@
+export {};
+
 const map = <T, R>(arr: readonly T[], fn: (val: T) => R): R[] => {
   return arr.map(fn);
 };
+
+type Test = ReadonlyArray<number>;
 
 const myArray = [1, 2, 3, 4] as const;
 
@@ -17,11 +21,3 @@ const config = {
 let a: ConfigType = config;
 
 let result = map(config.arr, v => v.toString());
-
-type Entries<TObject> = {
-  [K in keyof TObject]: [K, TObject[K]];
-}[keyof TObject];
-
-type SomeTest = Entries<{ a: number; b: string; c?: any }>;
-
-type Union = 'a' | 'b' | 'c';

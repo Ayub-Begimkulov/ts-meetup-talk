@@ -20,3 +20,9 @@ class Child extends Base {
 
   handler(object: Child) {}
 }
+
+const getA = <T>(obj: { a?: T; }, defaultValue?: NoInfer<T>) => {
+  return obj.a || defaultValue;
+};
+
+getA({ a: new Child() }, new Base());

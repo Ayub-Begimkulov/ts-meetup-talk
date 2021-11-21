@@ -1,32 +1,45 @@
-// TODO
-// add examples where compute doesn't work without `& unknown`
 export {};
 
-interface World {
+interface SomeInterface {
+  a: number;
+  b: symbol;
+  c: SomeSubInterface2;
+  world: SomeSubInterface;
+};
+
+interface SomeSubInterface {
   d: number;
-  f: (arg: D, arg2: D) => D;
+  f: (arg: SomeSubInterface2, arg2: SomeSubInterface2) => void;
   toString: () => string;
 }
 
-interface D {
+interface SomeSubInterface2 {
   d: string;
 }
 
-type Hello<T> = {
-  a: number;
-  b: T;
-  c: D;
-  world: Omit<World, 'a'>;
-} & Partial<{ a: number; l: string }>;
+export declare function doSomething(options: object): SomeInterface;
 
-type AnyFunction = (...args: any[]) => any;
+const result = doSomething({ option: true });
 
-type ComputeDeep<T> = T extends AnyFunction
-  ? (...args: ComputeDeep<Parameters<T>>) => ComputeDeep<ReturnType<T>>
+/* simple version of the compute */
+type Compute<T extends object> = {
+  [K in keyof T]: T[K]
+} & unknown;
+
+type SomeInfiniteRecursion<T> = {
+  [K in keyof T]: SomeInfiniteRecursion<T[K]>
+} & unknown;
+
+
+type ActualType = Compute<typeof result>;
+
+type ComputeDeep<T> =
+  T extends (...args: infer Args) => infer Return
+  ? (...args: ComputeDeep<Args>) => ComputeDeep<Return>
   : T extends object
   ? {
-      [K in keyof T]: ComputeDeep<T[K]>;
-    } & unknown
+    [K in keyof T]: ComputeDeep<T[K]>;
+  } & unknown
   : T;
 
-type LiteralType = ComputeDeep<Hello<symbol>>;
+type LiteralType = ComputeDeep<SomeInterface>;
